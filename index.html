@@ -1,0 +1,950 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Help Thee Introverts - Communication Assistant</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Source+Sans+Pro:wght@300;400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1a1a2e;
+            --secondary: #16213e;
+            --accent: #e94560;
+            --surface: #0f0f1a;
+            --surface-light: #252540;
+            --text-primary: #f1f1f1;
+            --text-secondary: #a0a0b8;
+            --success: #4ade80;
+            --highlight: #ffd700;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Source Sans Pro', sans-serif;
+            background: var(--surface);
+            color: var(--text-primary);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            padding: 1.5rem 2rem;
+            border-bottom: 2px solid transparent;
+            border-image: linear-gradient(90deg, var(--accent), transparent) 1;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .logo-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, var(--accent), #ff6b6b);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .logo h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.75rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--text-primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .tagline {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            font-weight: 300;
+        }
+
+        .api-key-input {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--surface-light);
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            border: 1px solid transparent;
+            transition: border-color 0.3s;
+        }
+
+        .api-key-input:focus-within {
+            border-color: var(--accent);
+        }
+
+        .api-key-input input {
+            background: transparent;
+            border: none;
+            color: var(--text-primary);
+            font-size: 0.875rem;
+            width: 200px;
+            outline: none;
+        }
+
+        .api-key-input input::placeholder {
+            color: var(--text-secondary);
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--surface) 100%);
+            padding: 4rem 2rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 30% 50%, rgba(233, 69, 96, 0.1) 0%, transparent 50%),
+                        radial-gradient(circle at 70% 50%, rgba(255, 215, 0, 0.05) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto 2rem;
+            animation: fadeInUp 0.8s ease-out 0.2s both;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .scroll-indicator {
+            animation: bounce 2s infinite;
+            color: var(--accent);
+            font-size: 2rem;
+            margin-top: 2rem;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            60% { transform: translateY(-5px); }
+        }
+
+        /* Main Content */
+        main {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+
+        .container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            align-items: start;
+        }
+
+        @media (max-width: 1024px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Input Panel */
+        .input-panel {
+            background: var(--surface-light);
+            border-radius: 16px;
+            padding: 1.5rem;
+            box-shadow: 0 8px 32px rgba(233, 69, 96, 0.1);
+        }
+
+        .panel-header {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .tab {
+            padding: 0.5rem 1rem;
+            background: transparent;
+            border: 1px solid var(--text-secondary);
+            color: var(--text-secondary);
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: 'Source Sans Pro', sans-serif;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+        }
+
+        .tab:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .tab.active {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: white;
+        }
+
+        .textarea-wrapper {
+            position: relative;
+            margin-bottom: 1rem;
+        }
+
+        .input-panel textarea {
+            width: 100%;
+            height: 300px;
+            background: var(--surface);
+            border: 1px solid var(--surface-light);
+            border-radius: 12px;
+            padding: 1rem;
+            color: var(--text-primary);
+            font-family: 'Source Sans Pro', sans-serif;
+            font-size: 1rem;
+            resize: vertical;
+            transition: border-color 0.3s;
+        }
+
+        .input-panel textarea:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+
+        .input-panel textarea::placeholder {
+            color: var(--text-secondary);
+        }
+
+        .char-counter {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 0.75rem;
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        .char-counter.warning {
+            color: var(--accent);
+        }
+
+        .quick-examples {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-bottom: 1rem;
+        }
+
+        .quick-example {
+            padding: 0.375rem 0.75rem;
+            background: var(--primary);
+            border: 1px solid var(--surface-light);
+            color: var(--text-secondary);
+            border-radius: 20px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .quick-example:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .analyze-btn {
+            width: 100%;
+            padding: 1rem 2rem;
+            background: linear-gradient(135deg, var(--accent), #ff6b6b);
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-family: 'Source Sans Pro', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .analyze-btn:hover:not(:disabled) {
+            transform: scale(1.02);
+            box-shadow: 0 8px 24px rgba(233, 69, 96, 0.3);
+        }
+
+        .analyze-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .analyze-btn .spinner {
+            display: none;
+            width: 20px;
+            height: 20px;
+            border: 2px solid transparent;
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        .analyze-btn.loading .spinner {
+            display: block;
+        }
+
+        .analyze-btn.loading .btn-text {
+            display: none;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Advice Panel */
+        .advice-panel {
+            background: var(--surface-light);
+            border-radius: 16px;
+            padding: 1.5rem;
+            box-shadow: 0 8px 32px rgba(233, 69, 96, 0.1);
+            min-height: 400px;
+        }
+
+        .advice-panel .panel-header {
+            color: var(--highlight);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 3rem 1rem;
+            color: var(--text-secondary);
+        }
+
+        .empty-state-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+        .empty-state h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        /* Results */
+        .results {
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .result-section {
+            margin-bottom: 1.5rem;
+        }
+
+        .result-section h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.1rem;
+            color: var(--accent);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .insights-list {
+            list-style: none;
+        }
+
+        .insights-list li {
+            padding: 0.75rem;
+            background: var(--surface);
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+            border-left: 3px solid var(--accent);
+            font-size: 0.95rem;
+        }
+
+        .insights-list li::before {
+            content: '→';
+            margin-right: 0.5rem;
+            color: var(--accent);
+        }
+
+        .action-list {
+            list-style: none;
+            counter-reset: action-counter;
+        }
+
+        .action-list li {
+            padding: 0.75rem;
+            background: var(--surface);
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+            counter-increment: action-counter;
+            font-size: 0.95rem;
+        }
+
+        .action-list li::before {
+            content: counter(action-counter);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px;
+            height: 24px;
+            background: var(--accent);
+            color: white;
+            border-radius: 50%;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-right: 0.75rem;
+        }
+
+        /* Template Card */
+        .template-card {
+            background: var(--surface);
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid var(--surface-light);
+        }
+
+        .template-header {
+            padding: 1rem;
+            background: var(--primary);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .template-header h4 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1rem;
+        }
+
+        .copy-btn {
+            padding: 0.375rem 0.75rem;
+            background: var(--accent);
+            border: none;
+            border-radius: 6px;
+            color: white;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .copy-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .template-content {
+            padding: 1rem;
+            font-family: 'Source Sans Pro', sans-serif;
+            font-size: 0.9rem;
+            white-space: pre-wrap;
+            color: var(--text-secondary);
+            max-height: 250px;
+            overflow-y: auto;
+        }
+
+        /* Book Reference */
+        .book-reference {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            padding: 1rem;
+            background: var(--surface);
+            border-radius: 8px;
+            margin-top: 0.5rem;
+            border-left: 3px solid var(--highlight);
+        }
+
+        .book-icon {
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .book-text {
+            font-family: 'Crimson Text', serif;
+            font-style: italic;
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+        }
+
+        .book-text strong {
+            color: var(--highlight);
+            font-style: normal;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            border-top: 1px solid var(--surface-light);
+            margin-top: 3rem;
+        }
+
+        /* Error State */
+        .error-message {
+            padding: 1rem;
+            background: rgba(233, 69, 96, 0.1);
+            border: 1px solid var(--accent);
+            border-radius: 8px;
+            color: var(--accent);
+            margin-bottom: 1rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h2 {
+                font-size: 2rem;
+            }
+
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .api-key-input input {
+                width: 150px;
+            }
+
+            .input-panel textarea {
+                height: 200px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <div class="logo">
+                <div class="logo-icon">💬</div>
+                <div>
+                    <h1>Help Thee Introverts</h1>
+                    <p class="tagline">Your Sales-Powered Communication Coach</p>
+                </div>
+            </div>
+            <div class="api-key-input">
+                <span>🔑</span>
+                <input type="password" id="apiKey" placeholder="Enter your Claude API key">
+            </div>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="hero-content">
+            <h2>Transform How You Communicate</h2>
+            <p>Paste your emails, chat transcripts, or task updates and receive personalized advice to showcase your work effectively and advance your career.</p>
+            <div class="scroll-indicator">↓</div>
+        </div>
+    </section>
+
+    <main>
+        <div class="container">
+            <!-- Input Panel -->
+            <div class="input-panel">
+                <h2 class="panel-header">
+                    <span>📝</span> Your Communication
+                </h2>
+
+                <div class="tabs">
+                    <button class="tab active" data-tab="chats">💬 Chats</button>
+                    <button class="tab" data-tab="emails">📧 Emails</button>
+                    <button class="tab" data-tab="tasks">📋 Tasks</button>
+                    <button class="tab" data-tab="custom">✍️ Custom</button>
+                </div>
+
+                <div class="quick-examples">
+                    <button class="quick-example" data-example="chat">Slack conversation</button>
+                    <button class="quick-example" data-example="email">Weekly update email</button>
+                    <button class="quick-example" data-example="task">Task list</button>
+                </div>
+
+                <div class="textarea-wrapper">
+                    <textarea id="inputText" placeholder="Paste your chat transcript, email draft, task list, or any communication here...
+
+Example for Chats:
+- A conversation where you shared your work
+- A meeting where you didn't speak up
+- A Slack thread about a project you contributed to
+
+Example for Emails:
+- A status update you sent to your manager
+- An email where you're asking for something
+- A project report you're unsure how to frame"></textarea>
+                    <span class="char-counter"><span id="charCount">0</span> / 5000</span>
+                </div>
+
+                <button class="analyze-btn" id="analyzeBtn">
+                    <span class="btn-text">🎯 Analyze My Communication</span>
+                    <span class="spinner"></span>
+                </button>
+            </div>
+
+            <!-- Advice Panel -->
+            <div class="advice-panel">
+                <h2 class="panel-header">
+                    <span>🎯</span> Your Communication Prescription
+                </h2>
+
+                <div id="results" class="results" style="display: none;">
+                    <!-- Key Insights -->
+                    <div class="result-section">
+                        <h3>🔍 Key Insights</h3>
+                        <ul class="insights-list" id="insights"></ul>
+                    </div>
+
+                    <!-- Recommended Actions -->
+                    <div class="result-section">
+                        <h3>⚡ Recommended Actions</h3>
+                        <ol class="action-list" id="actions"></ol>
+                    </div>
+
+                    <!-- Weekly Email Template -->
+                    <div class="result-section" id="templateSection">
+                        <h3>📧 Weekly Email Template</h3>
+                        <div class="template-card">
+                            <div class="template-header">
+                                <h4>Your Personalized Template</h4>
+                                <button class="copy-btn" id="copyTemplate">Copy</button>
+                            </div>
+                            <div class="template-content" id="template"></div>
+                        </div>
+                    </div>
+
+                    <!-- Book Reference -->
+                    <div class="result-section">
+                        <h3>📚 Based On</h3>
+                        <div class="book-reference">
+                            <span class="book-icon">📖</span>
+                            <p class="book-text" id="bookRef"></p>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="emptyState" class="empty-state">
+                    <div class="empty-state-icon">🎯</div>
+                    <h3>Ready to Transform Your Communication</h3>
+                    <p>Paste your communication above and click analyze to get personalized advice.</p>
+                </div>
+
+                <div id="errorState" class="error-message" style="display: none;"></div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>Helping introverts shine in the workplace 💡</p>
+    </footer>
+
+    <script>
+        // Tab switching
+        const tabs = document.querySelectorAll('.tab');
+        const inputText = document.getElementById('inputText');
+
+        const placeholders = {
+            chats: `Paste your chat transcript, email draft, task list, or any communication here...
+
+Example for Chats:
+- A conversation where you shared your work
+- A meeting where you didn't speak up
+- A Slack thread about a project you contributed to`,
+            emails: `Paste your email draft or correspondence here...
+
+Example:
+- A status update you sent to your manager
+- An email where you're asking for something
+- A project report you're unsure how to frame`,
+            tasks: `List your tasks or project updates here...
+
+Example:
+- What you worked on this week
+- Projects you're currently handling
+- Tasks you're proud of but struggle to highlight`,
+            custom: `Paste any communication you'd like to improve...`
+        };
+
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                tabs.forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                inputText.placeholder = placeholders[tab.dataset.tab];
+            });
+        });
+
+        // Quick examples
+        const quickExamples = document.querySelectorAll('.quick-example');
+        const examples = {
+            chat: `Slack conversation:
+Team: "Great job on the project everyone!"
+[You]: "Thanks"
+Manager: "We should highlight this at the all-hands"
+[You]: "Oh, it was really a team effort"
+
+This is a missed opportunity to showcase your specific contributions.`,
+            email: `Subject: Weekly Update
+
+Hi [Manager],
+
+Here's what I worked on this week:
+- Fixed some bugs
+- Attended meetings
+- Reviewed code
+
+Let me know if you need anything else.
+
+[Your Name]`,
+            task: `My tasks this week:
+- Fixed bug #123
+- Attended standup
+- Reviewed PRs
+- Made coffee
+
+I feel like I didn't accomplish much this week.`
+        };
+
+        quickExamples.forEach(example => {
+            example.addEventListener('click', () => {
+                inputText.value = examples[example.dataset.example];
+                updateCharCount();
+            });
+        });
+
+        // Character counter
+        function updateCharCount() {
+            const count = inputText.value.length;
+            const counter = document.getElementById('charCount');
+            counter.textContent = count;
+
+            const wrapper = document.querySelector('.char-counter');
+            if (count > 4500) {
+                wrapper.classList.add('warning');
+            } else {
+                wrapper.classList.remove('warning');
+            }
+        }
+
+        inputText.addEventListener('input', updateCharCount);
+
+        // Analyze button
+        const analyzeBtn = document.getElementById('analyzeBtn');
+        const resultsDiv = document.getElementById('results');
+        const emptyState = document.getElementById('emptyState');
+        const errorState = document.getElementById('errorState');
+
+        analyzeBtn.addEventListener('click', async () => {
+            const apiKey = document.getElementById('apiKey').value.trim();
+            const text = inputText.value.trim();
+
+            if (!apiKey) {
+                showError('Please enter your Claude API key');
+                return;
+            }
+
+            if (text.length < 50) {
+                showError('Please enter at least 50 characters for analysis');
+                return;
+            }
+
+            if (text.length > 5000) {
+                showError('Please limit your input to 5000 characters');
+                return;
+            }
+
+            // Determine the active tab
+            const activeTab = document.querySelector('.tab.active').dataset.tab;
+            const inputType = activeTab === 'custom' ? 'general communication' : activeTab;
+
+            analyzeBtn.classList.add('loading');
+            analyzeBtn.disabled = true;
+            errorState.style.display = 'none';
+
+            try {
+                const response = await fetch('https://api.anthropic.com/v1/messages', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'x-api-key': apiKey,
+                        'anthropic-version': '2023-06-01'
+                    },
+                    body: JSON.stringify({
+                        model: 'claude-opus-4-6',
+                        max_tokens: 2000,
+                        system: `You are a sales psychology and communication expert helping introverted employees communicate their work more effectively. Your goal is to analyze the user's communication and provide actionable advice based on principles from:
+
+1. "How to Win Friends and Influence People" by Dale Carnegie
+2. "The Psychology of Selling" by Brian Tracy
+3. "To Sell Is Human" by Daniel Pink
+4. "Crucial Conversations" by Patterson, Grenny, et al.
+5. "The Charisma Myth" by Olivia Cabane
+
+Analyze the input communication type: ${inputType}
+
+Provide your response in this exact JSON format:
+{
+  "insights": ["List of 3-4 key observations about their communication", ...],
+  "actions": ["Specific actionable recommendation 1", "Specific actionable recommendation 2", ...],
+  "weeklyTemplate": "A professional weekly update email template personalized to their work",
+  "bookReference": "A brief citation from one of the books above that's relevant to their situation"
+}`,
+                        messages: [{
+                            role: 'user',
+                            content: `Analyze this ${inputType} and provide communication advice:\n\n${text}`
+                        }]
+                    })
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.error?.message || 'API request failed');
+                }
+
+                const data = await response.json();
+                const content = data.content[0].text;
+
+                // Parse the JSON response
+                let parsed;
+                try {
+                    parsed = JSON.parse(content);
+                } catch {
+                    // If not valid JSON, try to extract JSON from the response
+                    const jsonMatch = content.match(/\{[\s\S]*\}/);
+                    if (jsonMatch) {
+                        parsed = JSON.parse(jsonMatch[0]);
+                    } else {
+                        throw new Error('Could not parse response');
+                    }
+                }
+
+                displayResults(parsed);
+
+            } catch (error) {
+                showError(error.message || 'An error occurred. Please check your API key and try again.');
+            } finally {
+                analyzeBtn.classList.remove('loading');
+                analyzeBtn.disabled = false;
+            }
+        });
+
+        function displayResults(data) {
+            emptyState.style.display = 'none';
+            resultsDiv.style.display = 'block';
+
+            // Insights
+            const insightsList = document.getElementById('insights');
+            insightsList.innerHTML = data.insights.map(insight => `<li>${insight}</li>`).join('');
+
+            // Actions
+            const actionsList = document.getElementById('actions');
+            actionsList.innerHTML = data.actions.map(action => `<li>${action}</li>`).join('');
+
+            // Template
+            const templateDiv = document.getElementById('template');
+            templateDiv.textContent = data.weeklyTemplate || 'No template generated.';
+
+            // Book Reference
+            const bookRef = document.getElementById('bookRef');
+            bookRef.innerHTML = data.bookReference || '';
+        }
+
+        function showError(message) {
+            errorState.textContent = message;
+            errorState.style.display = 'block';
+            emptyState.style.display = 'none';
+            resultsDiv.style.display = 'none';
+        }
+
+        // Copy template
+        document.getElementById('copyTemplate').addEventListener('click', () => {
+            const template = document.getElementById('template').textContent;
+            navigator.clipboard.writeText(template).then(() => {
+                const btn = document.getElementById('copyTemplate');
+                btn.textContent = 'Copied!';
+                setTimeout(() => {
+                    btn.textContent = 'Copy';
+                }, 2000);
+            });
+        });
+
+        // Save API key to localStorage
+        const apiKeyInput = document.getElementById('apiKey');
+        const savedKey = localStorage.getItem('claude_api_key');
+        if (savedKey) {
+            apiKeyInput.value = savedKey;
+        }
+
+        apiKeyInput.addEventListener('change', () => {
+            localStorage.setItem('claude_api_key', apiKeyInput.value);
+        });
+    </script>
+</body>
+</html>
