@@ -4,7 +4,8 @@ An AI-powered communication assistant designed to help introverted employees sho
 
 ## What Is This?
 
-"Help Thee Introverts" is a single-page web application that analyzes your workplace communications (chats, emails, task updates) and provides personalized advice on how to:
+"Help Thee Introv
+erts" is a single-page web application that analyzes your workplace communications (chats, emails, task updates) and provides personalized advice on how to:
 
 - **Showcase your work** without coming across as boastful
 - **Write more effective emails** that highlight your contributions

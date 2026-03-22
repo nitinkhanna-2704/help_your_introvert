@@ -667,7 +667,7 @@
                 <input type="password" id="apiKey" placeholder="Enter your Claude API key">
             </div>
             <div class="ollama-settings" id="ollamaSettings">
-                <label>Model: <input type="text" id="ollamaModel" value="llama3.3" placeholder="Model name"></label>
+                <label>Model: <input type="text" id="ollamaModel" value="llama3.2" placeholder="Model name"></label>
                 <label>URL: <input type="text" id="ollamaUrl" value="http://localhost:11434" placeholder="Ollama URL"></label>
             </div>
         </div>
@@ -968,13 +968,17 @@ Provide your response in this exact JSON format:
                     content = data.content[0].text;
 
                 } else {
-                    // Use Ollama
+                    // Use Ollama with CORS proxy
                     const ollamaUrl = document.getElementById('ollamaUrl').value.trim();
                     const ollamaModel = document.getElementById('ollamaModel').value.trim();
 
                     const prompt = `${systemPrompt.replace('{inputType}', inputType)}\n\nUser: Analyze this ${inputType} and provide communication advice:\n\n${text}`;
 
-                    const response = await fetch(`${ollamaUrl}/api/generate`, {
+                    // Use corsproxy.io to bypass CORS for file:// requests
+                    //const proxyUrl = 'https://corsproxy.io/?' + encodeURIComponent(`${ollamaUrl}/api/generate`);
+                    //change made : Nk
+                    const proxyUrl = `${ollamaUrl}/api/generate`;
+                    const response = await fetch(proxyUrl, {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json'
